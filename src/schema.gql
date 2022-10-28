@@ -9,15 +9,34 @@ type Item {
   quantityUnits: String
 }
 
+type User {
+  id: ID!
+  email: String!
+  fullName: String!
+  roles: [String!]!
+  isActive: Boolean!
+}
+
+type AuthResponse {
+  jwt: String!
+  user: User!
+}
+
 type Query {
   items: [Item!]!
   item(id: ID!): Item!
+  users: [User!]!
+  user(id: ID!): User!
+  renewJWT: AuthResponse!
 }
 
 type Mutation {
   createItem(createItemInput: CreateItemInput!): Item!
   updateItem(updateItemInput: UpdateItemInput!): Item!
   removeItem(id: ID!): Item!
+  removeUser(id: ID!): User!
+  signup(signupInput: SignupInput!): AuthResponse!
+  signin(signinInput: SigninInput!): AuthResponse!
 }
 
 input CreateItemInput {
@@ -41,4 +60,15 @@ input UpdateItemInput {
   """Product unit (gr, ml, k, etc.)"""
   quantityUnits: String
   id: ID!
+}
+
+input SignupInput {
+  email: String!
+  fullName: String!
+  password: String!
+}
+
+input SigninInput {
+  email: String!
+  password: String!
 }

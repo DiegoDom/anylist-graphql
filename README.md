@@ -21,22 +21,33 @@ $ yarn install
 ```bash
 $ npm i -g @nestjs/cli
 ```
+>**Nota:** Este comando se ejecuta como administrador o super user
+
 2. Configurar las variables de entorno en ```.env``` (utiliza ```.env.example``` como plantilla).
 ```bash
 # Ambiente de desarrollo de la app
 STATE=
+
 # puerto donde corre la app
 PORT=3000
+
 # HOST de la base de datos de Postgres
 DB_HOST=localhost
+
 # Puerto de la base de datos de Postgres
 DB_PORT=5432
+
 # Nombre de la base de datos de Postgres
 DB_NAME=
+
 # Usuario para la conexion a Postgres
 DB_USERNAME=
+
 # Contraseña para la conexion a Postgres
 DB_PASSWORD=
+
+# Secret para firmar los JWT
+JWT_SECRET=
 ```
 
 3. Instalar y correr [Docker Desktop](https://www.docker.com/products/docker-desktop/), enseguida correr para levantar la base de datos del proyecto.
