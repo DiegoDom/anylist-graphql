@@ -8,7 +8,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from './decorators';
 import { User } from '../users/entities';
 
-@Resolver()
+@Resolver(() => AuthResponse)
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
