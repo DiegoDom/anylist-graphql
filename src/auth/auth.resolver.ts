@@ -5,7 +5,6 @@ import { AuthResponse } from './types';
 import { AuthService } from './auth.service';
 import { Auth, CurrentUser } from './decorators';
 import { User } from '../users/entities';
-import { ValidRoles } from './enums/valid-roles.enum';
 
 @Resolver(() => AuthResponse)
 export class AuthResolver {
@@ -26,7 +25,7 @@ export class AuthResolver {
   }
 
   @Query(() => AuthResponse, { name: 'renewJWT' })
-  @Auth(ValidRoles.admin)
+  @Auth()
   renewJWT(@CurrentUser() user: User): AuthResponse {
     return this.authService.renewJWT(user);
   }
