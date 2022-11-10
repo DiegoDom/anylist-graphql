@@ -1,12 +1,5 @@
-import { InputType, Field, Float } from '@nestjs/graphql';
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsPositive,
-  IsString,
-  Min,
-} from 'class-validator';
+import { InputType, Field } from '@nestjs/graphql';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 @InputType()
 export class CreateItemInput {
@@ -15,14 +8,14 @@ export class CreateItemInput {
   @IsString()
   name: string;
 
-  @Field(() => Float, { description: 'Product quantity' })
+  /* @Field(() => Float, { description: 'Product quantity' })
   @IsPositive()
   @IsNumber(
     { maxDecimalPlaces: 2 },
     { message: 'Price must contain max two decimal places' },
   )
   @Min(1)
-  quantity: number;
+  quantity: number; */
 
   @Field(() => String, {
     description: 'Product unit (gr, ml, k, etc.)',
