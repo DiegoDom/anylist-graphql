@@ -26,7 +26,7 @@ $ npm i -g @nestjs/cli
 2. Configurar las variables de entorno en ```.env``` (utiliza ```.env.example``` como plantilla).
 ```bash
 # Ambiente de desarrollo de la app
-STATE=
+STATE=dev
 
 # puerto donde corre la app
 PORT=3000
@@ -50,6 +50,8 @@ DB_PASSWORD=
 JWT_SECRET=
 ```
 
+>**Nota:** Genera un secret aleatorio en [generate-secret.vercel](https://generate-secret.vercel.app/32)
+
 3. Instalar y correr [Docker Desktop](https://www.docker.com/products/docker-desktop/), enseguida correr para levantar la base de datos del proyecto.
 ```bash
 $ docker-compose up -d
@@ -60,10 +62,17 @@ $ docker-compose up -d
 ```bash
 # development
 $ yarn run start
+
 # watch mode
 $ yarn run start:dev
+
 # production mode
 $ yarn run start:prod
+
+# Crear datos de prueba en [Apollo Studio]
+mutation query {
+  executeSeed
+}
 ```
 
->**Nota:** Acceder a Apollo Studio en http://localhost:3000/graphql para realizar las pruebas.
+>**Nota:** Acceder a [Apollo Studio](http://localhost:3000/graphql) para realizar las pruebas.

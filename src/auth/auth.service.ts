@@ -18,10 +18,7 @@ export class AuthService {
 
   async signup(signupInput: SignupInput): Promise<AuthResponse> {
     // ? Crear el usuario
-    const user = await this.usersService.create({
-      ...signupInput,
-      password: bcryptjs.hashSync(signupInput.password, 10),
-    });
+    const user = await this.usersService.create(signupInput);
 
     // ? Generar el JWT
     const jwt = this.getJwt({ uid: user.id });

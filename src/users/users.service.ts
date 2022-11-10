@@ -25,7 +25,10 @@ export class UsersService {
 
   async create(signupInput: SignupInput): Promise<User> {
     try {
-      const user = this.usersRepository.create(signupInput);
+      const user = this.usersRepository.create({
+        ...signupInput,
+        password: bcryptjs.hashSync(signupInput.password, 10),
+      });
       return await this.usersRepository.save(user);
     } catch (error) {
       this.handleExceptions(error);

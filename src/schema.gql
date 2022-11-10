@@ -48,6 +48,9 @@ type Mutation {
   createItem(createItemInput: CreateItemInput!): Item!
   updateItem(updateItemInput: UpdateItemInput!): Item!
   removeItem(id: ID!): Item!
+
+  """Crea o restablece datos de prueba de la app"""
+  executeSeed: Boolean!
 }
 
 input SignupInput {
