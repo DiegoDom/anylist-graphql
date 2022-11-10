@@ -11,13 +11,17 @@ import {
 } from '@nestjs/graphql';
 
 import { UsersService } from './users.service';
-import { User } from './entities/user.entity';
+import { ItemsService } from '../items/items.service';
+
+import { PaginationsArgs, SearchArgs } from '../common/dto/args';
 import { ValidRolesArgs } from './dto/args/roles.arg';
+import { UpdateUserInput } from './dto/inputs';
+
+import { User } from './entities/user.entity';
+import { Item } from '../items/entities';
 
 import { Auth, CurrentUser } from '../auth/decorators';
 import { ValidRoles } from '../auth/enums';
-import { UpdateUserInput } from './dto/inputs';
-import { ItemsService } from '../items/items.service';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -65,5 +69,14 @@ export class UsersResolver {
   @ResolveField(() => Int, { name: 'itemCount' })
   async itemCount(@Parent() user: User): Promise<number> {
     return await this.itemsService.itemsCountByUser(user);
+  }
+
+  @ResolveField(() => [Item], { name: 'items' })
+  async getUserItems(
+    @Parent() user: User,
+    @Args() paginationsArgs: PaginationsArgs,
+    @Args() searchArgs: SearchArgs,
+  ): Promise<Item[]> {
+    return await this.itemsService.findAll(user, paginationsArgs, searchArgs);
   }
 }

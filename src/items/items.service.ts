@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateItemInput, UpdateItemInput } from './dto';
 import { User } from '../users/entities';
 import { Item } from './entities/item.entity';
+import { PaginationsArgs, SearchArgs } from '../common/dto/args';
 
 @Injectable()
 export class ItemsService {
@@ -18,10 +19,38 @@ export class ItemsService {
     return await this.itemsRepositoty.save(newItem);
   }
 
-  async findAll(user: User): Promise<Item[]> {
-    return await this.itemsRepositoty.find({
-      where: { user: { id: user.id } },
-    });
+  async findAll(
+    user: User,
+    paginationsArgs: PaginationsArgs,
+    searchArgs: SearchArgs,
+  ): Promise<Item[]> {
+    const { limit, offset } = paginationsArgs;
+    const { search } = searchArgs;
+
+    const queryBuilder = this.itemsRepositoty
+      .createQueryBuilder()
+      .take(limit)
+      .skip(offset)
+      .where(`"userId" = :userId`, { userId: user.id });
+
+    if (search) {
+      queryBuilder.andWhere('LOWER(name) like :name', {
+        name: `%${search.toLocaleLowerCase()}%`,
+      });
+    }
+
+    return await queryBuilder.getMany();
+
+    /* return await this.itemsRepositoty.find({
+      take: limit,
+      skip: offset,
+      where: {
+        user: {
+          id: user.id,
+        },
+        name: Like(`%${search}%`),
+      },
+    }); */
   }
 
   async findOne(id: string, user: User): Promise<Item> {

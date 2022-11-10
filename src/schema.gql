@@ -9,8 +9,17 @@ type User {
   roles: [String!]!
   isActive: Boolean!
   lastUpdatedBy: User
-  items: [Item!]!
   itemCount: Int!
+  items(
+    """Pagination offset to skip elements"""
+    offset: Int = 0
+
+    """Pagination limit of elements"""
+    limit: Int = 10
+
+    """Search term for filter elements"""
+    search: String
+  ): [Item!]!
 }
 
 type Item {
@@ -29,7 +38,16 @@ type Query {
   renewJWT: AuthResponse!
   users(roles: [ValidRoles!] = []): [User!]!
   user(id: ID!): User!
-  items: [Item!]!
+  items(
+    """Pagination offset to skip elements"""
+    offset: Int = 0
+
+    """Pagination limit of elements"""
+    limit: Int = 10
+
+    """Search term for filter elements"""
+    search: String
+  ): [Item!]!
   item(id: ID!): Item!
 }
 
