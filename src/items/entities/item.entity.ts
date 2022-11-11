@@ -1,12 +1,15 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { User } from '../../users/entities';
 import {
   Column,
   Entity,
   Index,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { User } from '../../users/entities';
+import { ListItem } from '../../list-item/entities';
 
 @Entity({ name: 'items' })
 @ObjectType()
@@ -19,12 +22,6 @@ export class Item {
   @Field(() => String)
   name: string;
 
-  /* @Column('float', {
-    default: 0.0,
-  })
-  @Field(() => Float)
-  quantity: number; */
-
   @Column('text', { nullable: true, default: 'pza' })
   @Field(() => String, { nullable: true })
   quantityUnits?: string;
@@ -33,4 +30,11 @@ export class Item {
   @Index('userId-index')
   @Field(() => User)
   user: User;
+
+  @OneToMany(() => ListItem, (listItem) => listItem.item, {
+    nullable: false,
+    lazy: true,
+  })
+  @Field(() => [ListItem])
+  listItem: ListItem;
 }

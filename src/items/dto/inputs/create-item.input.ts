@@ -8,15 +8,6 @@ export class CreateItemInput {
   @IsString()
   name: string;
 
-  /* @Field(() => Float, { description: 'Product quantity' })
-  @IsPositive()
-  @IsNumber(
-    { maxDecimalPlaces: 2 },
-    { message: 'Price must contain max two decimal places' },
-  )
-  @Min(1)
-  quantity: number; */
-
   @Field(() => String, {
     description: 'Product unit (gr, ml, k, etc.)',
     nullable: true,

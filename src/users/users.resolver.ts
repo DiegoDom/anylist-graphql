@@ -12,6 +12,7 @@ import {
 
 import { UsersService } from './users.service';
 import { ItemsService } from '../items/items.service';
+import { ListsService } from '../lists/lists.service';
 
 import { PaginationsArgs, SearchArgs } from '../common/dto/args';
 import { ValidRolesArgs } from './dto/args/roles.arg';
@@ -19,6 +20,7 @@ import { UpdateUserInput } from './dto/inputs';
 
 import { User } from './entities/user.entity';
 import { Item } from '../items/entities';
+import { List } from '../lists/entities';
 
 import { Auth, CurrentUser } from '../auth/decorators';
 import { ValidRoles } from '../auth/enums';
@@ -28,6 +30,7 @@ export class UsersResolver {
   constructor(
     private readonly usersService: UsersService,
     private readonly itemsService: ItemsService,
+    private readonly listsService: ListsService,
   ) {}
 
   @Query(() => [User], { name: 'users' })
@@ -78,5 +81,19 @@ export class UsersResolver {
     @Args() searchArgs: SearchArgs,
   ): Promise<Item[]> {
     return await this.itemsService.findAll(user, paginationsArgs, searchArgs);
+  }
+
+  @ResolveField(() => Int, { name: 'listsCount' })
+  async listsCount(@Parent() user: User): Promise<number> {
+    return await this.listsService.listsCountByUser(user);
+  }
+
+  @ResolveField(() => [List], { name: 'lists' })
+  async getUserLists(
+    @Parent() user: User,
+    @Args() paginationsArgs: PaginationsArgs,
+    @Args() searchArgs: SearchArgs,
+  ): Promise<List[]> {
+    return await this.listsService.findAll(user, paginationsArgs, searchArgs);
   }
 }

@@ -2,6 +2,31 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type ListItem {
+  id: ID!
+  quantity: Float!
+  completed: Boolean!
+  list: List!
+  item: Item!
+}
+
+type List {
+  id: ID!
+  name: String!
+  user: User!
+  items(
+    """Pagination offset to skip elements"""
+    offset: Int = 0
+
+    """Pagination limit of elements"""
+    limit: Int = 10
+
+    """Search term for filter elements"""
+    search: String
+  ): [ListItem!]!
+  totalItems: Int!
+}
+
 type User {
   id: ID!
   email: String!
@@ -20,6 +45,17 @@ type User {
     """Search term for filter elements"""
     search: String
   ): [Item!]!
+  listsCount: Int!
+  lists(
+    """Pagination offset to skip elements"""
+    offset: Int = 0
+
+    """Pagination limit of elements"""
+    limit: Int = 10
+
+    """Search term for filter elements"""
+    search: String
+  ): [List!]!
 }
 
 type Item {
@@ -27,6 +63,7 @@ type Item {
   name: String!
   quantityUnits: String
   user: User!
+  listItem: [ListItem!]!
 }
 
 type AuthResponse {
@@ -49,6 +86,18 @@ type Query {
     search: String
   ): [Item!]!
   item(id: ID!): Item!
+  lists(
+    """Pagination offset to skip elements"""
+    offset: Int = 0
+
+    """Pagination limit of elements"""
+    limit: Int = 10
+
+    """Search term for filter elements"""
+    search: String
+  ): [List!]!
+  list(id: ID!): List!
+  listItem(id: String!): ListItem!
 }
 
 """They are the valid roles that users can belong to."""
@@ -66,6 +115,11 @@ type Mutation {
   createItem(createItemInput: CreateItemInput!): Item!
   updateItem(updateItemInput: UpdateItemInput!): Item!
   removeItem(id: ID!): Item!
+  createList(createListInput: CreateListInput!): List!
+  updateList(updateListInput: UpdateListInput!): List!
+  removeList(id: ID!): List!
+  createListItem(createListItemInput: CreateListItemInput!): ListItem!
+  updateListItem(updateListItemInput: UpdateListItemInput!): ListItem!
 
   """Crea o restablece datos de prueba de la app"""
   executeSeed: Boolean!
@@ -105,5 +159,33 @@ input UpdateItemInput {
 
   """Product unit (gr, ml, k, etc.)"""
   quantityUnits: String
+  id: ID!
+}
+
+input CreateListInput {
+  """List name"""
+  name: String!
+}
+
+input UpdateListInput {
+  """List name"""
+  name: String
+  id: ID!
+}
+
+input CreateListItemInput {
+  """List Item quantity"""
+  quantity: Float = 1
+  completed: Boolean = false
+  listId: ID!
+  itemId: ID!
+}
+
+input UpdateListItemInput {
+  """List Item quantity"""
+  quantity: Float = 1
+  completed: Boolean = false
+  listId: ID
+  itemId: ID
   id: ID!
 }

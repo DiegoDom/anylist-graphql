@@ -11,12 +11,12 @@ import { PaginationsArgs, SearchArgs } from '../common/dto/args';
 export class ItemsService {
   constructor(
     @InjectRepository(Item)
-    private readonly itemsRepositoty: Repository<Item>,
+    private readonly itemsRepository: Repository<Item>,
   ) {}
 
   async create(createItemInput: CreateItemInput, user: User): Promise<Item> {
-    const newItem = this.itemsRepositoty.create({ ...createItemInput, user });
-    return await this.itemsRepositoty.save(newItem);
+    const newItem = this.itemsRepository.create({ ...createItemInput, user });
+    return await this.itemsRepository.save(newItem);
   }
 
   async findAll(
@@ -27,7 +27,7 @@ export class ItemsService {
     const { limit, offset } = paginationsArgs;
     const { search } = searchArgs;
 
-    const queryBuilder = this.itemsRepositoty
+    const queryBuilder = this.itemsRepository
       .createQueryBuilder()
       .take(limit)
       .skip(offset)
@@ -35,7 +35,7 @@ export class ItemsService {
 
     if (search) {
       queryBuilder.andWhere('LOWER(name) like :name', {
-        name: `%${search.toLocaleLowerCase()}%`,
+        name: `%${search.toLowerCase()}%`,
       });
     }
 
@@ -54,7 +54,7 @@ export class ItemsService {
   }
 
   async findOne(id: string, user: User): Promise<Item> {
-    const item = await this.itemsRepositoty.findOneBy({
+    const item = await this.itemsRepository.findOneBy({
       id,
       user: { id: user.id },
     });
@@ -71,20 +71,20 @@ export class ItemsService {
     user: User,
   ): Promise<Item> {
     await this.findOne(id, user);
-    const item = await this.itemsRepositoty.preload(updateItemInput);
+    const item = await this.itemsRepository.preload(updateItemInput);
 
-    return await this.itemsRepositoty.save(item);
+    return await this.itemsRepository.save(item);
   }
 
   async remove(id: string, user: User): Promise<Item> {
     const item = await this.findOne(id, user);
-    await this.itemsRepositoty.remove(item);
+    await this.itemsRepository.remove(item);
 
-    return { ...item, id };
+    return { ...item, id, user };
   }
 
   async itemsCountByUser(user: User): Promise<number> {
-    return await this.itemsRepositoty.count({
+    return await this.itemsRepository.count({
       where: {
         user: {
           id: user.id,

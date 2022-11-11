@@ -539,3 +539,10 @@ export const SEED_ITEMS = [
     category: 'other',
   },
 ];
+
+export const SEED_LIST = [
+  { name: 'market' },
+  { name: 'party' },
+  { name: 'pool' },
+  { name: 'aniversary' },
+];
